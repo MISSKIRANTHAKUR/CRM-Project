@@ -1,0 +1,88 @@
+from django.shortcuts import render
+from django.shortcuts import redirect, render
+from .models import *
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login, logout
+
+def Index(request):
+    return render(request, 'index.html')
+
+def Mdi(request):
+    return render(request, 'mdi.html')
+
+def LogOut(request):
+    logout(request)
+    return redirect('/')
+
+def SignupPage(request):
+    if request.method == "POST":
+        fir_name = request.POST['firstname']
+        lst_name = request.POST['lastname']
+        usr = request.POST['username']
+        pwd = request.POST['password']
+        uobj = User(first_name=fir_name,last_name=lst_name,username=usr,password=make_password(pwd),is_staff=True)
+        uobj.save()
+        print("Data Created Succsessfull!")
+        return redirect('/')
+    return render(request,"signup.html")
+
+
+def LoginPage(request):
+    if request.method == "POST":
+        usernm = request.POST['username']
+        pwd = request.POST['password']
+        user = authenticate(username=usernm, password=pwd)
+        if user:
+            login(request, user)
+            if User.is_superuser:
+                print("Superuser Loggedin")
+                return redirect('/index/')
+            elif User.is_staff:
+                print("User Loggedin")  
+                return redirect('/index/')
+        else:
+            print("User is invalid")
+            return redirect("/")
+    return render( request, "login.html")
+
+def Basic_tables(request):
+    pro = Product_Model.objects.all()
+    return render(request, 'basic-table.html',{'pro':pro})
+    
+def Basic_elements(request):
+    if request.method == 'POST':
+        pname = request.POST['productname']
+        image = request.POST['image']
+        dec = request.POST['description']
+        amut = request.POST['amount']
+        obj = Product_Model(productname=pname, image=image, description=dec, amount=amut)
+        obj.save()
+        print('add')
+        return redirect('/basic-table/')
+    else:    
+    #   cat = Category_model.objects.all()
+      return render(request, 'basic_elements.html')
+    
+def Update(request, id):    
+    u = Product_Model.objects.all()
+    if request.method == 'POST':
+        name = request.POST['name']
+        pname = request.POST['productname']
+        image = request.POST['image']
+        amt = request.POST['amount']
+        # category = request.POST['category']
+        des = request.POST['description']
+        data = Product_Model.objects.filter(id=id)
+        data.update(name=name, productname=pname, image=image, amount=amt, description=des)
+        return redirect('/basic-table/')
+    else:
+        proget = Product_Model.objects.get(id=id)
+        # cate = Category_model.objects.all()
+        return render(request,'edit-ptable.html',{'proget':proget, 'u':u, })  
+
+def Delete(request, id):
+    pget = Product_Model.objects.get(id=id)
+    pget.delete()
+    # return redirect('/basic-table/')
+
