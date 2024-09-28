@@ -1,0 +1,31 @@
+from django.contrib import admin
+from .models import *
+
+# Register your models here.
+
+# admin.site.register(Customer_model)
+admin.site.register(Product_Model)
+admin.site.register(User)
+
+# # class Order_modelAdmin(admin.ModelAdmin):
+# #     list_display = ('t_price', 'pay_id', 'order_id')
+# admin.site.register(Order_model)
+
+# class Cart_ModelAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'size', 'product', 'quantity')
+# admin.site.register(CartModel, Cart_ModelAdmin)
+
+# class Saler_ModelAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'price', 'category', 'description', 'image', 'sizes', 'quantity')
+
+#     def sizes(self, obj):
+#         return ", ".join(obj.get_sizes())
+#     sizes.short_description = 'Sizes'
+# admin.site.register(Saler_model, Saler_ModelAdmin)
+
+# admin.site.register(UserLikeModel)
+
+# class OrderModelAdmin(admin.ModelAdmin):
+#     list_display = ('user', 'product', 'price', 'status')
+
+# admin.site.register(OrderTracker)
